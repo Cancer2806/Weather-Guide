@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <title>City Weather</title>
+</head>
+<body>
+  <header>
+    <h1>City Weather Forecast</h1>
+  </header>
+
+  <main>
+    <!-- Search column on left of screen.  Search form at top, previous searches below as clickable buttons -->
+    <!-- User can search for a new city, or can select one of the previous searches -->
+    <!-- weather forecast for chosen city will show up on right of screen -->
+    <section class="search">
+      <article>
+        <h2>Search for a City</h2>
+        <form action="POST" class="city-search"></form>
+          <label></label>
+          <input type="text" default="Perth" id="selected-city">
+          <label>Search</label>
+          <input type="submit">
+        </form>
+      </article>
+      <br>
+      <article>
+        <h2>Or click on a previous choice below</h2>
+        <ul id="Previous Search List">
+          <!-- Generate with JS -->
+        </ul>
+      </article>
+    </section>
+
+    <!-- Column on right side of screen 70%  daily forecast at the top and five day forecast below -->
+    <section>
+      <article>
+        <p>Placeholder for Daily Forecast</p>
+        <!-- Today's Forecast top right side -->
+      </article>
+      <article>
+        <P>Placeholder for five day forecast</P>
+        
+        <!-- Five day forecast will be loaded here from JS -->
+      
+      </article>
+    </section>
+  </main>
+  <script src="./assets/js/script.js"></script>
+</body>
+</html>
