@@ -10,7 +10,7 @@ const contForecastEl = document.getElementById("fcast-container");
 const imgWeatherIcon = document.getElementById("weather-icon");
 
 // Global variables and assignments
-const token = config.API_Token;
+// const token = config.API_Token;
 const key = c9ed3e38e273ae3901fcdb4bd62d6919;
 const arryNameStore = [];
 
