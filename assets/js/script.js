@@ -11,7 +11,7 @@ const imgWeatherIcon = document.getElementById("weather-icon");
 
 // Global variables and assignments
 const token = config.API_Token;
-const key = config.API_Key;
+const key = c9ed3e38e273ae3901fcdb4bd62d6919;
 const arryNameStore = [];
 
 // Retrieve previously searched cities for selection by User if desired
