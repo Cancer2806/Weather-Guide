@@ -17,42 +17,42 @@
     <!-- Search column on left of screen.  Search form at top, previous searches below as clickable buttons -->
     <!-- User can search for a new city, or can select one of the previous searches -->
     <!-- weather forecast for chosen city will show up on right of screen -->
-    <!-- May need extra classes and divs to format -->
     <section class="search">
       <article>
         <h2>Search for a City</h2>
         <form id="city-search">
           <label for="selected-city"></label>
-          <input type="text" value="Perth" id="selected-city" autofocus="true">
+          <input type="text" id="selected-city" autofocus="true">
           <button type="submit">Search</button>
         </form>
       </article>
       <br>
       <article>
         <h2>Or click on a previous choice below</h2>
-        <ul id="Previous Search List">
+        <div id="prev-search">
           <!-- Generate with JS -->
-        </ul>
+        </div>
       </article>
     </section>
 
     <!-- Column on right side of screen 70%  daily forecast at the top and five day forecast below -->
     <section>
       <article>
-        <h2 id="current-place">Placeholder for Daily Forecast</h2>
+        <h2 id="current-place"></h2>
         <ul id="current-day-result">
 
         </ul>
         <!-- Today's Forecast top right side -->
       </article>
       <article>
-        <P>Placeholder for five day forecast</P>
-        <ul class="Forecast">
-
-        </ul>
-        <!-- Five day forecast will be loaded here from JS -->
-        <!-- Use cards, not a list, if practical -->
-      
+        <h2>Five Day Forecast:</h2>
+        <div id = "fcast-container">
+        
+          <!-- Five day forecast will be loaded here from JS -->
+        
+        </div>
+        
+              
       </article>
     </section>
   </main>
