@@ -16,9 +16,10 @@ const arryNameStore = [];
 
 // Retrieve previously searched cities for selection by User if desired
 const writeSavedCities = function () {
-  let cityList = JSON.parse(localStorage.getItem("savedCity")).sort();
+  let cityList = JSON.parse(localStorage.getItem("savedCity"));
   lstPreviousSearchEl.textContent = "";
   if (cityList) {
+    cityList.sort();
     for (i = 0; i < cityList.length; i++) {
       arryNameStore[i] = cityList[i];
       const btnPrevCity = document.createElement('button');
