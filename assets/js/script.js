@@ -1,10 +1,13 @@
 // Variables linking to DOM elements
 const frmSearchEl = document.querySelector("#city-search");
 const iptSearchCityEl = document.getElementById("selected-city");
-const txtCurrentPlace = document.getElementById("current-place");
+const txtCurrentPlaceEL = document.getElementById("current-place");
+const txtFiveDayEl = document.getElementById("five-day-h2");
+const contTodayEl = document.getElementById("today-fcast");
 const lstCurrentDayEl = document.getElementById("current-day-result");
 const lstPreviousSearchEl = document.getElementById("prev-search");
 const contForecastEl = document.getElementById("fcast-container");
+const imgWeatherIcon = document.getElementById("weather-icon");
 
 // Global variables and assignments
 const token = config.API_Token;
@@ -20,6 +23,7 @@ const writeSavedCities = function () {
       const btnPrevCity = document.createElement('button');
       btnPrevCity.textContent = cityList[i];
       btnPrevCity.setAttribute('name', cityList[i]);
+      btnPrevCity.classList.add('btn-prev');
       lstPreviousSearchEl.appendChild(btnPrevCity);
     }
   }
@@ -33,7 +37,7 @@ const prevCitySelected = function (event) {
   getCityCoords(event.target.getAttribute('name'))
     .then(function (data) {
       let txtCity = `${data[0].name}, ${data[0].country}`;
-      txtCurrentPlace.textContent = data[0].name + ", " + data[0].country;
+      txtCurrentPlaceEL.textContent = data[0].name + ", " + data[0].country;
 
       // Using city coordinates, call openweather API and get weather data
       getWeather(data[0].lon, data[0].lat)
@@ -68,10 +72,12 @@ const getWeather = function (lon, lat) {
 // Function to render the five day forecast to the web-page
 const buildFiveDay = function (fcastObj) {
   contForecastEl.textContent = "";
-
+  txtFiveDayEl.textContent = "Five Day Forecast:"
   for (i = 0; i < 5; i++) {
     const card = document.createElement('div');
+    card.classList.add("day-card")
     const cardTitle = document.createElement('h3');
+    cardTitle.classList.add("card-title");
     const cardImage = document.createElement('img');
     const cardList = document.createElement('ul');
 
@@ -106,27 +112,25 @@ const buildCurrentDay = function (today) {
   // Log current Days Weather to Screen
   // Clear previous data, if any
   lstCurrentDayEl.textContent = "";
-  // Create list elements
-  txtCurrentPlace.textContent = txtCurrentPlace.textContent + " (" + today.date + ")";
-  const iconImage = document.createElement('img');
-  iconImage.src = `https://openweathermap.org/img/wn/${today.iconCode}@2x.png`;
-  txtCurrentPlace.appendChild(iconImage);
+  // Create current day's elements
+  txtCurrentPlaceEL.textContent = txtCurrentPlaceEL.textContent + " (" + today.date + ")";
+  imgWeatherIcon.src = `https://openweathermap.org/img/wn/${today.iconCode}@2x.png`;
   const liTemp = document.createElement('li');
   liTemp.textContent = "Temp: " + today.temp + "°C";
-  const liUvi = document.createElement('li');
-  liUvi.textContent = "UVI:  " + today.uvi;
   const liWind = document.createElement('li');
   liWind.textContent = "Wind:  " + today.wind + "km/hour";
   const liHumidity = document.createElement('li');
   liHumidity.textContent = "Humidity:  " + today.humidity + "%";
 
   // Add Color to UVI Index
+  const liUvi = document.createElement('li');
+  liUvi.textContent = "UVI:  " + today.uvi;
   if (today.uvi < 3) {
-    liUvi.style.background = "green";
+    liUvi.innerHTML = "UVI:  " + "<span class='green'>" + today.uvi + "</span>";
   } else if (today.uvi < 8) {
-    liUvi.style.background = "yellow";
+    liUvi.innerHTML = "UVI:  " + "<span class='yellow'>" + today.uvi + "</span>";
   } else {
-    liUvi.style.background = "red";
+    liUvi.innerHTML = "UVI:  " + "<span class='red'>" + today.uvi + "</span>";
   }
 
   // Append to list container in html
@@ -154,7 +158,7 @@ const extractWeather = function(weatherData) {
 
   for (i = 1; i < 6; i++) {
     tempObj = {
-      date: moment.unix(weatherData.daily[i].dt).format('dddd, MMMM Do, YYYY'),
+      date: moment.unix(weatherData.daily[i].dt).format('MMMM Do, YYYY'),
       tempMax: weatherData.daily[i].temp.max,
       tempMin: weatherData.daily[i].temp.min,
       iconCode: weatherData.daily[i].weather[0].icon,
@@ -179,7 +183,7 @@ const searchByCity = function (event) {
     getCityCoords(cityName)
       .then(function (data) {
         let txtCity = `${data[0].name}, ${data[0].country}`;
-        txtCurrentPlace.textContent = data[0].name + ", " + data[0].country;
+        txtCurrentPlaceEL.textContent = data[0].name + ", " + data[0].country;
               
         // Using coordinates of City, call openweather API and get weather by long/lat
         getWeather(data[0].lon, data[0].lat)
