@@ -16,7 +16,8 @@ const arryNameStore = [];
 
 // Retrieve previously searched cities for selection by User if desired
 const writeSavedCities = function () {
-  let cityList = JSON.parse(localStorage.getItem("savedCity"));
+  let cityList = JSON.parse(localStorage.getItem("savedCity")).sort();
+  lstPreviousSearchEl.textContent = "";
   if (cityList) {
     for (i = 0; i < cityList.length; i++) {
       arryNameStore[i] = cityList[i];
@@ -145,7 +146,7 @@ const buildCurrentDay = function (today) {
 const extractWeather = function(weatherData) {
   // Object to hold relevant information for the current day
   const currentDay = {
-    date: moment.unix(weatherData.current.dt).format('dddd, MMMM Do, YYYY h:mm A'),
+    date: moment.unix(weatherData.current.dt).format('dddd, MMMM Do, YYYY'),
     temp: weatherData.current.temp,
     uvi: weatherData.current.uvi,
     iconCode: weatherData.current.weather[0].icon,
@@ -191,7 +192,7 @@ const searchByCity = function (event) {
             // Write city name to local storage
             arryNameStore.push(txtCity);
             localStorage.setItem("savedCity", JSON.stringify(arryNameStore));
-
+            writeSavedCities();
             extractWeather(weatherData);
           })
       })
