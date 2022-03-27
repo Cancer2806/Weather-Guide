@@ -1,5 +1,8 @@
 const frmSearchEl = document.querySelector("#city-search");
 const iptSearchCityEl = document.getElementById("selected-city");
+const txtCurrentPlace = document.getElementById("current-place");
+const lstCurrentDayEl = document.getElementById("current-day-result");
+
 
 const token = config.API_Token;
 const key = config.API_Key;
@@ -22,35 +25,71 @@ const getWeather = function (lon, lat) {
 
   return fetch(apiUrl)
     .then(function (response) {
-      console.log(response);
+      // console.log(response);
       return response.json();
     });
 }
 
+
 const buildDailyForecast = function(weatherData) {
   
+  // const currentDayIcon = `https://openweathermap.org/img/wn/10d@2x.png`;
+
   const currentDay = {
-    date: moment.unix(weatherData.current.dt),
+    date: moment.unix(weatherData.current.dt).format('dddd, MMMM Do, YYYY h:mm:ss A'),
     temp: weatherData.current.temp,
     uvi: weatherData.current.uvi,
-    icon: weatherData.current.weather.icon,
+    iconCode: weatherData.current.weather[0].icon,
     wind: weatherData.current.wind_speed,
     humidity: weatherData.current.humidity,
   }
+  
+  // Log current Days Weather to Screen
+  // Clear previous list
+  lstCurrentDayEl.textContent = "";
+  // Create list elements
+  txtCurrentPlace.textContent = txtCurrentPlace.textContent + " (" + currentDay.date + ")";
+  const liTemp = document.createElement('li');
+  liTemp.textContent = "Temp: " + currentDay.temp + "°C";
+  const liUvi = document.createElement('li');
+  liUvi.textContent = "UVI:  " + currentDay.uvi;
+  const liWind = document.createElement('li');
+  liWind.textContent = "Wind:  " + currentDay.wind + "km/hour";
+  const liHumidity = document.createElement('li');
+  liHumidity.textContent = "Humidity:  " + currentDay.humidity + "%";
+  const liIcon = document.createElement('li');
+  liIcon.textContent = "IconCode:  " + currentDay.iconCode;
+
+  // Add Color to UVI Index
+  if (currentDay.uvi < 3) {
+    liUvi.style.background = "green";
+  } else if (currentDay.uvi < 8){
+      liUvi.style.background = "yellow";
+  } else {
+    liUvi.style.background = "red";
+  }
+
+  // Append to list container in html
+  lstCurrentDayEl.appendChild(liTemp);
+  lstCurrentDayEl.appendChild(liWind);
+  lstCurrentDayEl.appendChild(liHumidity);
+  lstCurrentDayEl.appendChild(liUvi);
+  lstCurrentDayEl.appendChild(liIcon);
 
   // reset the forecast array to prevent appending
   // may not need this if converting to cards, but will need a method to refresh if a different city is chosen
   arryDaily.length = 0;
 
-  for (idx = 1; idx < 6; idx++) {
+  for (i = 1; i < 6; i++) {
     tempObj = {
-      date: moment.unix(weatherData.daily[idx].dt),
-      tempMax: weatherData.daily[idx].temp.max,
-      tempMin: weatherData.daily[idx].temp.min,
-      icon: weatherData.daily[idx].weather.icon,
-      wind: weatherData.daily[idx].wind_speed,
-      humidity: weatherData.daily[idx].humidity,
+      date: moment.unix(weatherData.daily[i].dt),
+      tempMax: weatherData.daily[i].temp.max,
+      tempMin: weatherData.daily[i].temp.min,
+      iconCode: weatherData.daily[i].weather[0].icon,
+      wind: weatherData.daily[i].wind_speed,
+      humidity: weatherData.daily[i].humidity,
     }
+    console.log("Daily Index information",i, tempObj.iconCode);
     arryDaily.push(tempObj);
   }
 }
@@ -59,6 +98,7 @@ const searchByCity = function (event) {
   event.preventDefault();
   const cityName = iptSearchCityEl.value.trim();
   console.log(cityName);
+  
 
   // Place into local storage
 
@@ -68,6 +108,7 @@ const searchByCity = function (event) {
   getCityCoords(cityName)
     .then(function(data) {
       console.log(`city ${data[0].name}`)
+      txtCurrentPlace.textContent = data[0].name + ", "+ data[0].country;
       
       // Using coordinates of City, call openweather API and get weather by long/lat
       getWeather(data[0].lon, data[0].lat)
